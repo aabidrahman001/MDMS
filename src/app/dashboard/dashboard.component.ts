@@ -56,6 +56,7 @@ export class DashboardComponent implements OnInit {
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { CommonModule } from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -78,10 +79,22 @@ export class DashboardComponent implements OnInit {
 
   loading = true;
 
-  constructor(private ds: DashboardService) {}
+  constructor(
+    private router: Router,
+    //private dataService: DataServiceService,
+    private ds: DashboardService
+  )
+  {}
 
+  storedValue!: any;
   ngOnInit(): void {
     this.loadData();
+      // Check if the user is logged in as admin
+      if(!sessionStorage.getItem('admin')) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.storedValue = sessionStorage.getItem('admin');
   }
 
   loadData() {
@@ -100,8 +113,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+
   logout() {
-    window.location.href = '/login';
+    sessionStorage.removeItem('admin');
+    this.router.navigate(['/login']);
+
   }
 
 }
