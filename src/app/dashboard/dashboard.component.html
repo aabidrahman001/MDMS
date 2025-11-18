@@ -1,0 +1,172 @@
+<!--
+<div class="dashboard-wrapper">
+
+  &lt;!&ndash; Top Navigation &ndash;&gt;
+  <nav class="top-nav">
+    <div class="nav-left">
+      <img src="assets/logo.png" alt="Logo" class="nav-logo">
+      <span class="nav-title">Meter Data Management System</span>
+    </div>
+    <div class="nav-right">
+      <span class="user-label">Welcome, {{ username || 'User' }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  &lt;!&ndash; Main content &ndash;&gt;
+  <div class="content">
+
+    <h2 class="dashboard-title">Dashboard Overview</h2>
+    <p class="dashboard-subtitle">Real-time meter insights and system summary</p>
+
+    &lt;!&ndash; Stats Grid &ndash;&gt;
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <h3>Total Meters</h3>
+        <p class="stat-value">{{ totalMeters || 0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Online Meters</h3>
+        <p class="stat-value online">{{ onlineMeters || 0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Offline Meters</h3>
+        <p class="stat-value offline">{{ offlineMeters || 0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Active Alerts</h3>
+        <p class="stat-value alerts">{{ activeAlerts || 0 }}</p>
+      </div>
+
+    </div>
+
+    &lt;!&ndash; Analytics Section &ndash;&gt;
+    <div class="analytics-card">
+      <h3>Recent Operations & Activity</h3>
+      <p class="analytics-desc">Consumption patterns, event logs, and sync history</p>
+
+      <div class="placeholder-box">
+        <p>Analytics chart placeholder<br>(Integrate charts here later)</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+-->
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+
+      <span class="logo-text"><img src="https://www.spectrum-bd.com/wp-content/uploads/2015/02/new_logo-1.png" width="30%" alt="Logo" class="logo"> MDMS</span>
+    </div>
+
+    <ul class="menu">
+      <li class="menu-item active">
+        <i class="bi bi-speedometer2"></i> Dashboard
+      </li>
+
+      <li class="menu-item">
+        <i class="bi bi-lightning-charge-fill"></i> Meter Status
+      </li>
+
+      <li class="menu-item">
+        <i class="bi bi-geo-alt-fill"></i> GIS Heatmap
+      </li>
+
+      <li class="menu-item">
+        <i class="bi bi-bell-fill"></i> Alerts
+      </li>
+
+      <li class="menu-item">
+        <i class="bi bi-gear-fill"></i> Settings
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- TOP NAV -->
+    <header class="topbar">
+      <div class="topbar-title">Meter Data Management System</div>
+
+      <div class="user-section">
+        <span class="welcome-text">Welcome, {{ username }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD CONTENT -->
+    <div class="content-wrapper" *ngIf="!loading">
+
+      <h2 class="section-title">Dashboard Overview</h2>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <p class="stat-title">Total Meters</p>
+          <p class="stat-value">{{ totalMeters }}</p>
+        </div>
+
+        <div class="stat-card online">
+          <p class="stat-title">Online Meters</p>
+          <p class="stat-value">{{ onlineMeters }}</p>
+        </div>
+
+        <div class="stat-card offline">
+          <p class="stat-title">Offline Meters</p>
+          <p class="stat-value">{{ offlineMeters }}</p>
+        </div>
+
+        <div class="stat-card alert-card">
+          <p class="stat-title">Active Alerts</p>
+          <p class="stat-value">{{ activeAlerts }}</p>
+        </div>
+
+      </div>
+
+      <!-- RECENT ALERTS TABLE -->
+      <h3 class="section-subtitle">Recent Alerts</h3>
+
+      <div class="table-container">
+        <table class="alert-table">
+          <thead>
+          <tr>
+            <th>Meter ID</th>
+            <th>Type</th>
+            <th>Severity</th>
+            <th>Location</th>
+            <th>Time</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let a of recentAlerts">
+            <td>{{ a.meterId }}</td>
+            <td>{{ a.type }}</td>
+            <td [class.severe]="a.severity === 'High'">{{ a.severity }}</td>
+            <td>{{ a.location }}</td>
+            <td>{{ a.time }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- LOADING SPINNER -->
+    <div class="loading-box" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading dashboard...</p>
+    </div>
+
+  </main>
+</div>

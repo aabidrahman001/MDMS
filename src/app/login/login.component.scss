@@ -1,0 +1,132 @@
+/* Full-screen dark gradient background */
+.login-wrapper {
+  width: 100%;
+  height: 100vh;
+  background: radial-gradient(circle at top left, #1b2234, #0b0f1d);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Success message bar */
+.message-box {
+  position: absolute;
+  top: 20px;
+  padding: 10px 18px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.message-cross {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Login card container */
+.login-card {
+  width: 380px;
+  background: #111827;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    0 0 50px rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: left;
+}
+
+/* Logo section */
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 50px;
+  opacity: 0.85;
+}
+
+.title {
+  font-size: 24px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.subtitle {
+  text-align: center;
+  color: #9aa3b2;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+/* Labels */
+.form-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+  color: #cbd5e1;
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  background: #0f172a;
+  border: 1px solid #2b3345;
+  border-radius: 8px;
+  color: white;
+  outline: none;
+  font-size: 14px;
+}
+
+.input-field:focus {
+  border-color: #3b82f6;
+}
+
+/* Error text */
+.error-text {
+  font-size: 12px;
+  color: #ff6b6b;
+  margin-top: 4px;
+}
+
+/* Sign-in button */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg,#22d3ee,#2563eb);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500;
+  box-shadow: 0 15px 35px #60a5fa59;
+
+}
+
+.btn-login:hover {
+  opacity: 0.9;
+}
+
+button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  box-shadow: 0 15px 35px #60a5fa59;
+}
+
+/* Demo text */
+.demo-text {
+  margin-top: 18px;
+  color: #7b8597;
+  font-size: 12px;
+  text-align: center;
+}

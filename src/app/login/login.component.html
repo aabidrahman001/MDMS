@@ -1,0 +1,53 @@
+<div class="login-wrapper">
+
+  <div *ngIf="showMessageFlag" class="message-box">
+    <span class="message-text">Login Successful &#10004;</span>
+    <span (click)="closeMessage()" class="message-cross">&times;</span>
+  </div>
+
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="logo-container">
+      <!-- Replace with your own logo image if needed -->
+      <img src="https://www.spectrum-bd.com/wp-content/uploads/2015/02/new_logo-1.png" alt="Logo" class="logo" />
+      <h2 class="title">Meter Data Management System</h2>
+    </div>
+
+    <p class="subtitle">Sign in to manage operations.</p>
+
+    <form (ngSubmit)="formSubmit(f)" #f="ngForm">
+
+      <label class="form-label">Username</label>
+      <input
+        ngModel
+        name="name"
+        type="text"
+        class="input-field"
+        placeholder="Enter Username"
+        required
+        #name="ngModel"
+      />
+      <div *ngIf="!name.valid && name.touched" class="error-text">Username cannot be blank</div>
+
+      <label class="form-label mt-3">Password</label>
+      <input
+        ngModel
+        name="password"
+        type="password"
+        class="input-field"
+        placeholder="Enter Password"
+        required
+        #password="ngModel"
+      />
+      <div *ngIf="!password.valid && password.touched" class="error-text">Password cannot be blank</div>
+
+      <button [disabled]="!f.valid" type="submit" class="btn-login mt-4">
+        Sign in
+      </button>
+
+      <p class="demo-text">Demo account: mdmadmin</p>
+    </form>
+
+  </div>
+</div>
