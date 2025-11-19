@@ -1,26 +1,42 @@
+name: Angular CI + SonarQube + GitHub Pages + ZAP
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
 jobs:
-  sonarqube:
-    name: SonarQube
+  # -------------------------------
+  # SonarQube + Build
+  # -------------------------------
+  build-and-sonar:
+    name: Build Angular & SonarQube Scan
     runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  deploy-gh-pages:
-    runs-on: ubuntu-latest
-    needs: sonarqube
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - name: Build Angular
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Inject secrets and build Angular
+      - name: Inject environment secrets & build Angular
         run: |
           echo "export const environment = {
             production: true,
@@ -32,7 +48,33 @@ jobs:
             TOKEN: '${{ secrets.TOKEN }}'
           };" > src/environments/environment.prod.ts
           npm run build -- --configuration production --base-href="/"
-      - name: Deploy to GitHub Pages
+
+      # Run unit tests
+      - name: Run unit tests with coverage
+        run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
+
+      # SonarQube scan
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # -------------------------------
+  # Deploy to GitHub Pages
+  # -------------------------------
+  deploy-gh-pages:
+    runs-on: ubuntu-latest
+    needs: build-and-sonar
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Deploy Angular to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_PAT }}
@@ -40,21 +82,30 @@ jobs:
           keep_files: true
           force_orphan: true
 
+  # -------------------------------
+  # ZAP Baseline Scan
+  # -------------------------------
   zap-scan:
     runs-on: ubuntu-latest
     needs: deploy-gh-pages
+    name: ZAP Baseline Scan
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
-          ref: main
-      - uses: zaproxy/action-baseline@v0.15.0
+          ref: master
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.15.0
         with:
           token: ${{ secrets.GH_PAT }}
           docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
           target: 'https://aabidrahman001.github.io/MDMS/'
           rules_file_name: 'zap-rules.tsv'
           cmd_options: '-a'
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v4
         with:
           name: zap-report
           path: report_html.html
