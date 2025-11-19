@@ -78,7 +78,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./dist/MDMS/browser/
+          publish_dir: ./dist/MDMS/
           keep_files: true
           force_orphan: true
 
