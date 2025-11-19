@@ -1,4 +1,4 @@
-name: Angular CI + SonarQube + GitHub Pages + ZAP
+name: Angular CI + SonarQube + GitHub Pages + ZAP Scan
 
 on:
   push:
