@@ -17,7 +17,7 @@ export class LoginComponent {
   ) {}
 
   allUser = [
-    {"userName": "mdmadmin"},
+    {"userName": "admin"},
     {"password": "mdmadmin5124"},
   ];
 

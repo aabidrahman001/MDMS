@@ -1,0 +1,163 @@
+/* Layout */
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  background: #f6f7fb;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #121c2d;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #cdd5e0;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: #1f2c44;
+  color: white;
+}
+
+/* Topbar */
+.topbar {
+  height: 60px;
+  background: white;
+  border-bottom: 1px solid #e1e1e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+}
+
+.topbar-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.logout-btn {
+  background: #d9534f;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background: #c64340;
+}
+
+.main-content {
+  width: calc(100vw - 240px);
+  overflow-y: auto;
+}
+
+.content-wrapper {
+  padding: 25px;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.stat-title {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.online .stat-value {
+  color: #28a745;
+}
+
+.offline .stat-value {
+  color: #d9534f;
+}
+
+.alert-card .stat-value {
+  color: #ff9800;
+}
+
+/* Alerts table */
+.table-container {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.alert-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alert-table th,
+.alert-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.severe {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+/* Loading */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 120px;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
