@@ -3,7 +3,7 @@ name: Angular CI + SonarQube + GitHub Pages + ZAP Scan
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
 
