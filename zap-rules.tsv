@@ -1,0 +1,47 @@
+# OWASP ZAP Baseline Rules
+# Format: ID<TAB>Description<TAB>Action
+# Actions: IGNORE | WARN | FAIL
+
+# --- Cookie & Session Security ---
+10010	Cookie No HttpOnly Flag	WARN
+10011	Cookie Without Secure Flag	WARN
+10054	Cookie Without SameSite Attribute	WARN
+90033	Loosely Scoped Cookie	WARN
+
+# --- HTTP Security Headers ---
+10020	X-Frame-Options Header Not Set	WARN
+10021	X-Content-Type-Options Header Missing	WARN
+10035	Strict-Transport-Security Header Not Set	WARN
+10038	Content Security Policy (CSP) Header Not Set	WARN
+10063	Permissions Policy Header Not Set	WARN
+
+# --- Information Disclosure ---
+10023	Information Disclosure - Debug Error Messages	FAIL
+10024	Information Disclosure - Sensitive Information in URL	WARN
+10025	Information Disclosure - Sensitive Information in HTTP Referrer Header	WARN
+10027	Information Disclosure - Suspicious Comments	IGNORE
+10029	Content Security Policy (CSP) Header Not Set	WARN
+90022	Application Error Disclosure	FAIL
+10096	Timestamp Disclosure	WARN
+10097	Hash Disclosure	WARN
+
+# --- Input Validation / Injection ---
+40012	Cross Site Scripting (Reflected)	FAIL
+40013	Cross Site Scripting (Persistent)	FAIL
+40014	Cross Site Scripting (DOM Based)	WARN
+40018	SQL Injection	FAIL
+40019	Path Traversal	FAIL
+40020	Remote File Inclusion	FAIL
+90001	Insecure JSF ViewState	FAIL
+
+# --- Authentication & CSRF ---
+10202	Absence of Anti-CSRF Tokens	WARN
+10105	Weak Authentication Method	WARN
+90005	Sec-Fetch-Dest Header Missing	WARN
+
+# --- Miscellaneous ---
+10015	Incomplete or No Cache-control and Pragma HTTP Header Set	IGNORE
+10049	Storable and Cacheable Content	IGNORE
+10050	Retrieved from Cache	IGNORE
+10098	Cross-Domain Misconfiguration	WARN
+90004	Insufficient Site Isolation Against Spectre Vulnerability	IGNORE

@@ -1,6 +1,16 @@
-.map-container {
+.gis-container {
+  width: 87vw;       // full viewport width
+  height: 90vh;       // adjust height as needed
+  margin: auto;          // remove horizontal margin
+  padding: 8px;         // remove padding
+  border: 1px solid #ccc;
+  border-radius: 8px;   // optional
+  overflow: hidden;
+}
+
+.map {
   width: 100%;
-  height: 600px;
-  border-radius: 8px;
-  margin-top: 20px;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
 }

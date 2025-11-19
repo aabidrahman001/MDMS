@@ -1,1 +1,58 @@
-<p>alerts works!</p>
+<div class="content-wrapper" *ngIf="!loading">
+  <h2 class="section-title">Dashboard Overview</h2>
+
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-title">Total Meters</p>
+      <p class="stat-value">{{ totalMeters }}</p>
+    </div>
+    <div class="stat-card online">
+      <p class="stat-title">Online Meters</p>
+      <p class="stat-value">{{ onlineMeters }}</p>
+    </div>
+    <div class="stat-card maintenane">
+      <p class="stat-title">Under Maintenance</p>
+      <p class="stat-value">{{ underMaintenance }}</p>
+    </div>
+    <div class="stat-card offline">
+      <p class="stat-title">Offline Meters</p>
+      <p class="stat-value">{{ offlineMeters }}</p>
+    </div>
+    <div class="stat-card alert-card">
+      <p class="stat-title">Active Alerts</p>
+      <p class="stat-value">{{ activeAlerts }}</p>
+    </div>
+  </div>
+
+  <!-- RECENT ALERTS TABLE -->
+  <h3 class="section-subtitle">Recent Alerts</h3>
+  <div class="table-container">
+    <table class="alert-table">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Severity</th>
+        <th>Region</th>
+        <th>Time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let a of recentAlerts">
+        <td>{{ a.title }}</td>
+        <td>{{ a.type }}</td>
+        <td [class.severe]="a.type === 'meter-stale'">High</td>
+        <td>{{ a.region }}</td>
+        <td>{{ a.timestamp | date:'short' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LOADING SPINNER -->
+<div class="loading-box" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading dashboard...</p>
+</div>

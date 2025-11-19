@@ -1,1 +1,59 @@
-<p>meter-status works!</p>
+<div class="meter-status-container" *ngIf="!loading; else loadingState">
+
+  <div class="status-section fleet">
+    <h2>Fleet Status</h2>
+    <div class="status-cards">
+      <div class="card total">
+        <p class="label">Total Devices</p>
+        <p class="value">{{ fleetTotal }}</p>
+      </div>
+      <div class="card online">
+        <p class="label">Online</p>
+        <p class="value">{{ online }}</p>
+      </div>
+      <div class="card offline">
+        <p class="label">Offline</p>
+        <p class="value">{{ offline }}</p>
+      </div>
+      <div class="card maintenance">
+        <p class="label">Maintenance</p>
+        <p class="value">{{ maintenance }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-section connections">
+    <h2>Connections</h2>
+    <div class="status-cards">
+      <div class="card direct">
+        <p class="label">Direct</p>
+        <p class="value">{{ directConnections }}</p>
+      </div>
+      <div class="card dcu">
+        <p class="label">DCU</p>
+        <p class="value">{{ dcuConnections }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-section telemetry" *ngIf="telemetryUsage.length">
+    <h2>Telemetry Snapshot</h2>
+    <div class="usage-chart">
+      <div class="bar" *ngFor="let u of telemetryUsage" [style.height.%]="u.usage / 5">
+        <span class="hour">{{ u.hour }}</span>
+      </div>
+    </div>
+    <div class="metrics">
+      <p>Carbon Avoided: {{ carbonAvoided }} Kg</p>
+      <p>Power Quality: {{ powerQuality | number:'1.0-2' }}%</p>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #loadingState>
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Loading meter status...</p>
+  </div>
+</ng-template>
