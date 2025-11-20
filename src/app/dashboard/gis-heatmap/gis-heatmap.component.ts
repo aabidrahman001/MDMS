@@ -39,10 +39,10 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: [23.8103, 90.4125], // Dhaka
+      center: [23.8103, 90.4125],
       zoom: 7,
       minZoom: 7,
-      maxBounds: [[20, 85], [27, 93]] // restrict map to Bangladesh
+      maxBounds: [[20, 85], [27, 93]]
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -77,7 +77,7 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
 
       this.map.addLayer(markers);
 
-      // Fit map bounds to all markers
+
       const latLngs = devices.map((d: any) => this.siteCoordinates[d.site]).filter(Boolean);
       if (latLngs.length) this.map.fitBounds(L.latLngBounds(latLngs));
     });

@@ -1,9 +1,7 @@
 <div class="content-wrapper" *ngIf="!loading">
 
-  <!-- PAGE TITLE -->
   <h2 class="section-title">Dashboard Analytics</h2>
 
-  <!-- KPI CARDS -->
   <div class="kpi-grid">
     <div class="kpi-card">
       <p>Total Meters</p>
@@ -31,28 +29,23 @@
     </div>
   </div>
 
-  <!-- CHARTS GRID -->
   <div class="charts-grid">
 
-    <!-- STATUS DONUT -->
     <div class="chart-card">
       <h3>Meter Status</h3>
       <canvas id="statusChart"></canvas>
     </div>
 
-    <!-- REGION BAR -->
     <div class="chart-card">
       <h3>Meters by Region</h3>
       <canvas id="regionChart"></canvas>
     </div>
 
-    <!-- HOURLY LOAD LINE -->
     <div class="chart-card full">
       <h3>Hourly Load (kWh)</h3>
       <canvas id="loadChart"></canvas>
     </div>
 
-    <!-- ADDITIONAL METRICS -->
     <div class="chart-card metrics">
       <h3>Power Quality & Carbon Avoided</h3>
       <div class="metric-item">
@@ -79,7 +72,6 @@
 
   </div>
 
-  <!-- ALERTS TABLE -->
   <h3 class="section-subtitle">Recent Alerts</h3>
   <div class="table-container">
     <table class="alert-table">
@@ -106,7 +98,6 @@
 
 </div>
 
-<!-- LOADING -->
 <div class="loading-box" *ngIf="loading">
   <div class="spinner"></div>
   <p>Loading dashboard...</p>

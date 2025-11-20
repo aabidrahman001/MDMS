@@ -13,32 +13,26 @@ import Chart from 'chart.js/auto';
 })
 export class DashboardUiComponent implements OnInit, AfterViewInit {
 
-  // KPI
   totalMeters = 0;
   onlineMeters = 0;
   underMaintenance = 0;
   offlineMeters = 0;
   activeAlerts = 0;
 
-  // Telemetry
   loadByHour: any[] = [];
   carbonAvoided = 0;
   powerQuality = 0;
 
-  // Commands
   pendingCmd = 0;
   executedToday = 0;
   failedToday = 0;
 
-  // Alerts
   recentAlerts: any[] = [];
 
-  // Region data
   fleetRegions: any[] = [];
 
   loading = true;
 
-  // Chart instances
   statusChart: any;
   regionChart: any;
   loadChart: any;
@@ -51,8 +45,8 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Charts will render after data is loaded
   }
+
 
   loadData() {
     this.loading = true;
@@ -60,45 +54,28 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
     this.ds.getDashboardStats().subscribe({
       next: stats => {
         const fleet = stats.fleetSummary?.fleet || {};
-        const telemetry = stats.telemetry || {};
-        const commands = stats.commandSummary || {};
-
-        // ----------------------------
-        // FLEET KPI
-        // ----------------------------
         this.totalMeters = fleet.total || 0;
         this.onlineMeters = fleet.status?.online || 0;
-        this.underMaintenance = fleet.status?.maintenance || 0;
         this.offlineMeters = fleet.status?.offline || 0;
+        this.underMaintenance = fleet.status?.maintenance || 0;
 
-        // ----------------------------
-        // Store region data separately
-        // ----------------------------
-        this.fleetRegions = stats.fleetSummary?.regions || [];
+        this.fleetRegions = fleet.regions || [];
+        console.log('Fleet regions for chart:', this.fleetRegions);
 
-        // ----------------------------
-        // TELEMETRY
-        // ----------------------------
+        const telemetry = stats.telemetry || {};
         this.loadByHour = telemetry.loadByHour || [];
         this.carbonAvoided = telemetry.carbonAvoidedKg || 0;
         this.powerQuality = telemetry.powerQualityScore || 0;
 
-        // ----------------------------
-        // COMMANDS
-        // ----------------------------
+
+        const commands = stats.commandSummary || {};
         this.pendingCmd = commands.pending || 0;
         this.executedToday = commands.executedToday || 0;
         this.failedToday = commands.failedToday || 0;
 
-        // ----------------------------
-        // ALERTS
-        // ----------------------------
         this.refreshAlerts();
 
-        // ----------------------------
-        // RENDER CHARTS
-        // ----------------------------
-        setTimeout(() => this.renderCharts(), 0); // wait for DOM
+        setTimeout(() => this.renderCharts(), 0);
 
         this.loading = false;
       },
@@ -108,6 +85,7 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
 
   refreshAlerts() {
     this.ds.getRecentAlerts().subscribe({
@@ -120,9 +98,7 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
   }
 
   renderCharts() {
-    // ----------------------------
-    // STATUS DONUT CHART
-    // ----------------------------
+
     const statusCtx = document.getElementById('statusChart') as HTMLCanvasElement;
     if (statusCtx) {
       this.statusChart = new Chart(statusCtx, {
@@ -141,9 +117,7 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
       });
     }
 
-    // ----------------------------
-    // REGION BAR CHART
-    // ----------------------------
+
     const regionCtx = document.getElementById('regionChart') as HTMLCanvasElement;
     if (regionCtx) {
       this.regionChart = new Chart(regionCtx, {
@@ -163,9 +137,7 @@ export class DashboardUiComponent implements OnInit, AfterViewInit {
       });
     }
 
-    // ----------------------------
-    // HOURLY LOAD LINE CHART
-    // ----------------------------
+
     const loadCtx = document.getElementById('loadChart') as HTMLCanvasElement;
     if (loadCtx) {
       this.loadChart = new Chart(loadCtx, {
