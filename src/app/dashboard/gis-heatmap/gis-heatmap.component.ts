@@ -24,7 +24,8 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
     "Khulna Dock": [22.8051, 89.5683],
     "Jatrabari": [23.7165, 90.4221],
     "Cumilla EPZ": [23.4600, 91.1800],
-    "Sreemangal": [24.3061, 91.7292]
+    "Sreemangal": [24.3061, 91.7292],
+    "Dhaka": [23.7945, 90.4100]
   };
 
   constructor(private dashboardService: DashboardService) {}
