@@ -8,19 +8,21 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
-  contents: read
+  contents: write
   actions: read
   security-events: write
 
 jobs:
-  # -------------------------------
-  # SonarQube + Build
-  # -------------------------------
+
+  # --------------------------------------------------------
+  # Build + Unit Tests + SonarQube
+  # --------------------------------------------------------
   build-and-sonar:
-    name: Build Angular & SonarQube Scan
+    name: Build Angular & Run SonarQube
     runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,8 +37,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Inject secrets and build Angular
-      - name: Inject environment secrets & build Angular
+      # Inject secrets and build Angular project
+      - name: Inject environment.prod.ts & build Angular
         run: |
           echo "export const environment = {
             production: true,
@@ -47,50 +49,57 @@ jobs:
             TENANT_ID: '${{ secrets.TENANT }}',
             TOKEN: '${{ secrets.TOKEN }}'
           };" > src/environments/environment.prod.ts
-          npm run build -- --configuration production --base-href="/mdms/"
 
-      # Run unit tests
+          npm run build -- --configuration production --base-href="/MDMS/"
+
       - name: Run unit tests with coverage
         run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
-      # SonarQube scan
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # -------------------------------
+      # Upload build artifact for next job
+      - name: Upload Angular build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-dist
+          path: dist/mdms/browser
+
+  # --------------------------------------------------------
   # Deploy to GitHub Pages
-  # -------------------------------
+  # --------------------------------------------------------
   deploy-gh-pages:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     needs: build-and-sonar
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+    steps:
+      # Download artifact generated from build job
+      - name: Download Angular build artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 20
+          name: angular-dist
+          path: dist/mdms/browser
 
       - name: Deploy Angular to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./dist/mdms/browser/
-          keep_files: true
+          publish_dir: dist/mdms/browser
           force_orphan: true
 
-  # -------------------------------
-  # ZAP Baseline Scan
-  # -------------------------------
+  # --------------------------------------------------------
+  # ZAP Scan
+  # --------------------------------------------------------
   zap-scan:
+    name: ZAP Baseline Scan
     runs-on: ubuntu-latest
     needs: deploy-gh-pages
-    name: ZAP Baseline Scan
+
     steps:
-      - name: Checkout repository
+      - name: Checkout main branch
         uses: actions/checkout@v5
         with:
           ref: main
