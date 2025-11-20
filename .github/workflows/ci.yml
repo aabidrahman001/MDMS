@@ -47,7 +47,7 @@ jobs:
             TENANT_ID: '${{ secrets.TENANT }}',
             TOKEN: '${{ secrets.TOKEN }}'
           };" > src/environments/environment.prod.ts
-          npm run build -- --configuration production --base-href="/"
+          npm run build -- --configuration production --base-href="/mdms/"
 
       # Run unit tests
       - name: Run unit tests with coverage
