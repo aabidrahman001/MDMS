@@ -1,10 +1,26 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/leaflet.markercluster.js';
+
+const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
+const iconUrl = 'assets/leaflet/marker-icon.png';
+const shadowUrl = 'assets/leaflet/marker-shadow.png';
+
+
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+
+L.Marker.prototype.options.icon = iconDefault;
+
 
 @Component({
   selector: 'app-gis-heatmap',
@@ -76,7 +92,6 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
       });
 
       this.map.addLayer(markers);
-
 
       const latLngs = devices.map((d: any) => this.siteCoordinates[d.site]).filter(Boolean);
       if (latLngs.length) this.map.fitBounds(L.latLngBounds(latLngs));
