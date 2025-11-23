@@ -1,12 +1,17 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
-import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/leaflet.markercluster.js';
+
+// Bring in the Leaflet types, and also ensure the module runs.
+import * as leaflet from 'leaflet';
+import 'leaflet';
+import 'leaflet.markercluster';
+
+// Bind the global L (from the scripts + side-effect imports) to the typed name
+declare let L: typeof leaflet;
 
 const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
 const iconUrl = 'assets/leaflet/marker-icon.png';
 const shadowUrl = 'assets/leaflet/marker-shadow.png';
-
 
 const iconDefault = L.icon({
   iconRetinaUrl,
@@ -21,7 +26,6 @@ const iconDefault = L.icon({
 
 L.Marker.prototype.options.icon = iconDefault;
 
-
 @Component({
   selector: 'app-gis-heatmap',
   standalone: true,
@@ -29,19 +33,19 @@ L.Marker.prototype.options.icon = iconDefault;
   styleUrls: ['./gis-heatmap.component.scss']
 })
 export class GisHeatmapComponent implements OnInit, AfterViewInit {
-  map!: L.Map;
+  map!: leaflet.Map;
 
   siteCoordinates: Record<string, [number, number]> = {
-    "Hatirjheel": [23.7407, 90.3843],
-    "Mymensingh": [24.7471, 90.4203],
-    "Patenga": [22.3456, 91.8023],
-    "Banani": [23.7945, 90.4100],
-    "Rajpara": [24.3747, 88.6048],
-    "Khulna Dock": [22.8051, 89.5683],
-    "Jatrabari": [23.7165, 90.4221],
-    "Cumilla EPZ": [23.4600, 91.1800],
-    "Sreemangal": [24.3061, 91.7292],
-    "Dhaka": [23.7945, 90.4100]
+    Hatirjheel: [23.7407, 90.3843],
+    Mymensingh: [24.7471, 90.4203],
+    Patenga: [22.3456, 91.8023],
+    Banani: [23.7945, 90.41],
+    Rajpara: [24.3747, 88.6048],
+    'Khulna Dock': [22.8051, 89.5683],
+    Jatrabari: [23.7165, 90.4221],
+    'Cumilla EPZ': [23.46, 91.18],
+    Sreemangal: [24.3061, 91.7292],
+    Dhaka: [23.7945, 90.41]
   };
 
   constructor(private dashboardService: DashboardService) {}
@@ -58,7 +62,10 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
       center: [23.8103, 90.4125],
       zoom: 7,
       minZoom: 7,
-      maxBounds: [[20, 85], [27, 93]]
+      maxBounds: [
+        [20, 85],
+        [27, 93]
+      ]
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -70,15 +77,19 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
     this.dashboardService.getDashboardStats().subscribe(stats => {
       const devices = stats.fleetSummary?.fleet?.devices || [];
 
-      // @ts-ignore: Leaflet.MarkerCluster plugin
+      // Now this is the same L the plugin patched
       const markers = L.markerClusterGroup();
 
       devices.forEach((d: any) => {
         const coords = this.siteCoordinates[d.site];
         if (!coords) return;
 
-        const color = d.status === 'online' ? 'green' :
-          d.status === 'offline' ? 'red' : 'orange';
+        const color =
+          d.status === 'online'
+            ? 'green'
+            : d.status === 'offline'
+            ? 'red'
+            : 'orange';
 
         const marker = L.circleMarker(coords, {
           radius: 8,
@@ -93,8 +104,13 @@ export class GisHeatmapComponent implements OnInit, AfterViewInit {
 
       this.map.addLayer(markers);
 
-      const latLngs = devices.map((d: any) => this.siteCoordinates[d.site]).filter(Boolean);
-      if (latLngs.length) this.map.fitBounds(L.latLngBounds(latLngs));
+      const latLngs = devices
+        .map((d: any) => this.siteCoordinates[d.site])
+        .filter(Boolean) as [number, number][];
+
+      if (latLngs.length) {
+        this.map.fitBounds(L.latLngBounds(latLngs));
+      }
     });
   }
 }
